@@ -1,0 +1,92 @@
+#include<stdio.h>
+
+#include<conio.h>
+
+#include<math.h>
+
+//void AvgRR(void);
+
+void main()
+
+{
+
+	float cfat[100],I_invest,scrap,ARR,sum=0,Avg_income,Avg_invest;
+	int life,i;
+
+clrscr();
+
+	printf("Enter Initial Investment of the project :\t");
+
+	scanf("%f",&I_invest);
+
+	printf("Enter Scrap Value:\t");
+
+	scanf("%f",&scrap);
+
+	printf("Enter Life span of a project :\t");
+
+	scanf("%d",&life);
+
+	printf("Enter %d years Cash Flow After Tax:\n",life);
+
+	for(i=1;i<=life;i++)
+
+	{
+
+		printf("Enter %d year Cash Flow :\t",i);
+
+		scanf("%f",&cfat[i]);
+
+	}
+
+	for(i=1;i<=life;i++)
+
+	{
+
+		printf("%d year Cash Flow :\t %f\n",i,cfat[i]);
+
+	}
+
+	for(i=1;i<=life;i++)
+
+	{
+
+		sum+=cfat[i];
+
+	}
+
+	Avg_income=sum/life;
+
+	Avg_invest=0.5*(I_invest - scrap);
+
+	ARR=(Avg_income/Avg_invest)*100;
+
+	
+
+	printf("Average Income :\t %f \n",Avg_income );
+
+	printf("Average Investment:\t %f\n",Avg_invest);
+
+	printf("Average Rate of Return :\t %f\n",ARR );
+
+		
+
+		
+
+getch();
+
+}
+
+
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
