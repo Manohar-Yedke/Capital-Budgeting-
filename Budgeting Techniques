@@ -1,0 +1,203 @@
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+void AvgRR(void);
+void PI(void);
+void SL_M(void);
+void WDV(void);
+
+	char prj_name[100][100];
+	float TAX_per[100],tax,cfat[100],wtax,curr_invest[100],dep,I_invest,scrap,k,ARR,sum=0,Avg_income,Avg_invest,df[100],CFAT[100],pvcf[100],npv,gpv,add,pi,SLM,cfbt[100],CFAD[100],DEP[100],CFAT_BD[100];
+	int life,i,j,n,c,choice;
+void main()
+{
+	
+clrscr();
+	printf(" How many Projects do you Wanna Enter : \t");
+	scanf("%d",&n);
+	for(j=1;j<=n;j++)
+	{
+		sum=0;
+	printf("Enter %d Project name :\t ",j);
+	scanf("%s",&prj_name[i]);
+	printf("Enter %s Project Details :\n",prj_name[i]);
+	printf("Enter Initial Investment of the %d project :\t",j);
+	scanf("%f",&I_invest);
+	printf("Enter %d project Scrap Value:\t",j);
+	scanf("%f",&scrap);
+	
+	printf("Enter Discount Factor :\t");
+	scanf("%f",&k);
+	
+	printf("What Do You wanna Enter CFAT or CFBT :\n");
+	printf("Enter 1 for CFAT (or) Enter 2 for CFBT :\n");
+	printf("Enter your Choice of Cash Flow :\t");
+	scanf("%d",&c);
+    if(c==1)
+    {
+	printf("Enter Life span(Total years)of a %d project :\t",j);
+	scanf("%d",&life);
+	printf("Enter %d years Cash Flow After Tax:\n",life);
+	for(i=1;i<=life;i++)
+	{
+		printf("Enter %d year Cash Flow :\t",i);
+		scanf("%f",&cfat[i]);
+	}
+	for(i=1;i<=life;i++)
+	{
+		printf("%d year Cash Flow :\t %f\n",i,cfat[i]);
+	}
+     }
+   else if(c==2)
+   {
+	printf("Enter Life span(Total years)of a %d project :\t",j);
+	scanf("%d",&life);
+	printf("Enter %d years Cash Flow Before Tax:\n",life);
+	for(i=1;i<=life;i++)
+	{
+		printf("Enter %d year Cash Flow :\t",i);
+		scanf("%f",&cfbt[i]);
+	}
+	for(i=1;i<=life;i++)
+	{
+		printf("%d year Cash Flow :\t %f\n",i,cfbt[i]);
+	}
+	printf("Depreciation Methods :\n");
+	printf(" For SLM enter 1 and For WDV enter 2 : \n");
+	printf(" Enter Your Method Choice :\t");
+	scanf("%d",&choice);
+	if(choice==1)
+	{
+		SL_M();
+	}
+	else if(choice==2)
+	{
+		WDV();
+	}
+   }
+   else
+   {
+	exit(0);
+   }	
+	
+		
+		AvgRR();
+		PI();
+	}
+		
+getch();
+}
+
+	void AvgRR()
+	{
+	for(i=1;i<=life;i++)
+	{
+		sum+=cfat[i];
+	}
+	Avg_income=sum/life;
+	Avg_invest=0.5*(I_invest - scrap);
+	ARR=(Avg_income/Avg_invest)*100;
+	printf("\nProject %d %s Average Rate of Return :\n",j,prj_name[j]);
+	printf("Average Income :\t %f \n",Avg_income );
+	printf("Average Investment:\t %f\n",Avg_invest);
+	printf("Average Rate of Return :\t %f\n",ARR );
+	}
+		
+	void PI()
+	{
+		add=0;
+		gpv=0;
+		k=1+(k/100);
+		for(i=1;i<=life;i++)
+		{
+			
+			df[i]=1/pow(k,i);
+		}
+		for(i=1;i<=life;i++)
+		{
+			pvcf[i]=cfat[i]*df[i];
+			gpv+=pvcf[i];
+		}
+		npv=gpv-I_invest;
+		pi=gpv/I_invest;
+		printf(" Year \t CFAT \t\t DiscountFactor \t Present Value of CF \n");
+		for(i=1;i<=life;i++)
+		{
+		printf("%d \t %f \t %f \t\t %f \n",i,cfat[i],df[i],pvcf[i]);
+		}
+		printf("Gross Present Value : \t %f\n",gpv);
+		printf("Net Present Value : \t %f \n",npv);
+		printf(" Profitability Index : \t %f \n",pi);
+	}
+
+	void SL_M()
+	{
+		printf("Straight Line Method (SLM) :\n");
+		printf("Enter Tax Rate for SLM : \t ");
+		scanf("%f",&tax);
+		SLM=(I_invest-scrap)/life;
+		dep=SLM;
+		for(i=1;i<=life;i++)
+		{
+			CFAD[i]=cfbt[i]-dep;
+			TAX_per[i]=CFAD[i]*(tax/100);
+			CFAT[i]=CFAD[i]-TAX_per[i];
+			CFAT_BD[i]=CFAT[i]+dep;
+			cfat[i]=CFAT_BD[i];
+		}
+		printf("YEAR \t CFBT \t DEP \t CFAD \t TAX@%f % \t CFAT \t CFAT_BD \n",tax);
+		
+		for(i=1;i<=life;i++)
+		{
+			printf("%d \t %f \t %f \t %f \t %f \t %f \t %f \n",i,cfbt[i],dep,CFAD[i],TAX_per[i],CFAT[i],CFAT_BD[i]);
+		}
+
+	}
+	
+	void WDV()
+	{
+		printf("Written Down Value Method : \n");
+		printf("Enter Written Down Tax Rate: \t");
+		scanf("%f",&wtax);
+		printf("Enter Tax Rate for WDV : \t");
+		scanf("%f",&tax);
+		for(i=1;i<=life;i++)
+		{
+			if(i==1)
+			{
+				DEP[i]=I_invest*(wtax/100);
+				curr_invest[i]=I_invest-DEP[i];
+			}
+			else
+			{
+				DEP[i]=curr_invest[i-1]*(wtax/100);
+				curr_invest[i]=curr_invest[i-1]-DEP[i];
+			}
+		}
+				
+		for(i=1;i<=life;i++)
+		{
+			CFAD[i]=cfbt[i]-DEP[i];
+			TAX_per[i]=CFAD[i]*(tax/100);
+			CFAT[i]=CFAD[i]-TAX_per[i];
+			CFAT_BD[i]=CFAT[i]+DEP[i];
+			cfat[i]=CFAT_BD[i];
+		}
+		printf("YEAR \t CFBT \t DEP \t CFAD \t TAX@%f % \t CFAT \t CFAT_BD \n",tax);
+		
+		for(i=1;i<=life;i++)
+		{
+			printf("%d \t %f \t %f \t %f \t %f \t %f \t %f \n",i,cfbt[i],DEP[i],CFAD[i],TAX_per[i],CFAT[i],CFAT_BD[i]);
+		}
+
+	}
+
+
+
+
+		
+		
+
+
+
+
